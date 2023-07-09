@@ -23,8 +23,13 @@
           <el-button type="primary" @click="redirectToPoliceman(row)">Открыть</el-button>
         </template>
       </el-table-column>
+      <el-table-column label="Удалить">
+        <template #default="{ row }">
+          <el-button type="danger" @click="deletePoliceman(row)">Удалить</el-button>
+        </template>
+      </el-table-column>
     </el-table>
-    <el-button class="add" size="large" type="primary">Добавить сотрудника</el-button>
+    <el-button @click="addPoliceman()" class="add" size="large" type="primary">Добавить сотрудника</el-button>
   </div>
 
   <div v-if="activeName == 'second'">
@@ -37,8 +42,13 @@
           <el-button type="primary" @click="redirectToAuto(row)">Открыть</el-button>
         </template>
       </el-table-column>
+      <el-table-column label="Удалить">
+        <template #default="{ row }">
+          <el-button type="danger" @click="deleteCar(row)">Удалить</el-button>
+        </template>
+      </el-table-column>
     </el-table>
-    <el-button class="add" size="large" type="primary">Добавить авто</el-button>
+    <el-button  @click="addCar()"  class="add" size="large" type="primary">Добавить авто</el-button>
   </div>
 
   <div v-if="activeName == 'third'">
@@ -122,6 +132,36 @@ export default {
     redirectToPoliceman(row) {
       // Перенаправление на другой путь с помощью Vue Router
       this.$router.push(`/policeman/${row.id}`);
+    },
+    addPoliceman(row) {
+      // Перенаправление на другой путь с помощью Vue Router
+      this.$router.push(`/add-policeman`);
+    },
+    deletePoliceman(row){
+      axios.delete("http://localhost:3000/policeman/" + row.id)
+      .then(response => {
+        console.log(response.data)
+        this.GetPoliceman()
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+    redirectToAuto(row){
+      this.$router.push(`/car/${row.id}`);
+    },
+    addCar(){
+      this.$router.push(`/add-car`);
+    },
+    deleteCar(row){
+      axios.delete("http://localhost:3000/autopark/" + row.id)
+      .then(response => {
+        console.log(response.data)
+        this.GetAutoPark()
+      })
+      .catch(error => {
+        console.log(error)
+      })
     },
     GetPoliceman(){
       axios.get("http://localhost:3000/policeman")
