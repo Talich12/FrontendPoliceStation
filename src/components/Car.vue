@@ -124,7 +124,9 @@ export default {
         policeman_id: this.policeman_id
       })
       .then(response => {
+        this.policeman_id = ""
         this.GetPoliceman()
+        this.GetPolicemanNot()
         console.log(response.data)
       })
       .catch(error => {

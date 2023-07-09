@@ -63,8 +63,13 @@
           <el-button type="primary" @click="redirectToGun(row)">View</el-button>
         </template>
       </el-table-column>
+      <el-table-column label="Удалить">
+        <template #default="{ row }">
+          <el-button type="danger" @click="deleteGun(row)">Удалить</el-button>
+        </template>
+      </el-table-column>
     </el-table>
-    <el-button class="add" size="large" type="primary">Добавить оружие</el-button>
+    <el-button @click="addGun(row)" class="add" size="large" type="primary">Добавить оружие</el-button>
   </div>
 
   <div v-if="activeName == 'fourth'">
@@ -80,8 +85,13 @@
           <el-button type="primary" @click="redirectToTrainee(row)">View</el-button>
         </template>
       </el-table-column>
+      <el-table-column label="Удалить">
+        <template #default="{ row }">
+          <el-button type="danger" @click="deleteTrainee(row)">Удалить</el-button>
+        </template>
+      </el-table-column>
     </el-table>
-    <el-button class="add" size="large" type="primary">Добавить стажера</el-button>
+    <el-button @click="addTrainee(row)" class="add" size="large" type="primary">Добавить стажера</el-button>
   </div>
 
   <div v-if="activeName == 'five'">
@@ -96,8 +106,13 @@
           <el-button type="primary" @click="redirectToDetention(row)">View</el-button>
         </template>
       </el-table-column>
+      <el-table-column label="Удалить">
+        <template #default="{ row }">
+          <el-button type="danger" @click="deleteDetention(row)">Удалить</el-button>
+        </template>
+      </el-table-column>
     </el-table>
-    <el-button class="add" size="large" type="primary">Добавить задержание</el-button>
+    <el-button  @click="addDetention(row)" class="add" size="large" type="primary">Добавить задержание</el-button>
   </div>
 
   <div v-if="activeName == 'six'">
@@ -113,8 +128,13 @@
           <el-button type="primary" @click="redirectToCriminal(row)">View</el-button>
         </template>
       </el-table-column>
+      <el-table-column label="Удалить">
+        <template #default="{ row }">
+          <el-button type="danger" @click="deleteCriminal(row)">Удалить</el-button>
+        </template>
+      </el-table-column>
     </el-table>
-    <el-button class="add" size="large" type="primary">Добавить преступника</el-button>
+    <el-button @click="addCriminal()" class="add" size="large" type="primary">Добавить преступника</el-button>
   </div>
 </template>
 
@@ -158,6 +178,70 @@ export default {
       .then(response => {
         console.log(response.data)
         this.GetAutoPark()
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+    redirectToGun(row){
+      this.$router.push(`/armory/` + row.id);
+    },
+    addGun(){
+      this.$router.push(`/add-armory`);
+    },
+    deleteGun(row){
+      axios.delete("http://localhost:3000/armory/" + row.id)
+      .then(response => {
+        console.log(response.data)
+        this.GetArmory()
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+    redirectToTrainee(row){
+      this.$router.push(`/trainee/${row.id}`);
+    },
+    addTrainee(){
+      this.$router.push(`/add-trainee`)
+    },
+    deleteTrainee(row){
+      axios.delete("http://localhost:3000/trainee/" + row.id)
+      .then(response => {
+        console.log(response.data)
+        this.GetTrainee()
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+    redirectToDetention(row){
+      this.$router.push(`/detention/${row.id}`);
+    },
+    addDetention(){
+      this.$router.push(`/add-detention`)
+    }, 
+    deleteDetention(row){
+      axios.delete("http://localhost:3000/detention/" + row.id)
+      .then(response => {
+        console.log(response.data)
+        this.GetDetention()
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+    redirectToCriminal(row){
+      this.$router.push(`/criminal/${row.id}`)
+    },
+    addCriminal(){
+      this.$router.push(`add-criminal`)
+    },
+    deleteCriminal(row){
+      axios.delete("http://localhost:3000/criminal/" + row.id)
+      .then(response => {
+        console.log(response.data)
+        this.GetCriminal()
       })
       .catch(error => {
         console.log(error)

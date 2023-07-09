@@ -11,7 +11,7 @@
       <el-input v-model="policeman.sername" />
     </el-form-item>
     <el-form-item label="Должность">
-      <el-select v-model="job_id" class="m-2" placeholder="Select" size="large">
+      <el-select v-model="policeman.job.id" class="m-2" placeholder="Select" size="large">
         <el-option
           v-for="item in jobs"
           :key="item.id"
@@ -73,8 +73,10 @@
     data() {
         return {
           policeman: {
+            job: {
+              id: 0
+            }
           },
-          job_id: "",
           jobs: [],
           gun_data: [],
           auto_data: []
@@ -84,11 +86,13 @@
       redirectToAuto(row){
         this.$router.push(`/car/${row.id}`);
       },
+      redirectToGun(row){
+        this.$router.push(`/armory/${row.id}`);
+      },
       GetPoliceman(){
         axios.get("http://localhost:3000/policeman/" + this.$route.params.id)
         .then(response => {
           this.policeman = response.data
-          this.policeman_job = response.data.job
           console.log(response.data)
         })
         .catch(error => {
@@ -131,12 +135,12 @@
           name: this.policeman.name,
           sername: this.policeman.sername,
           lastname: this.policeman.lastname,
-          job_id: this.job_id,
+          job_id: this.policeman.job.id,
           hire_date: dayjs(this.policeman.hire_date).format('YYYY-MM-DD'),
           birthday: dayjs(this.policeman.birthday).format('YYYY-MM-DD')
         })
         .then(response => {
-          this.jobs = response.data
+          this.$router.push(`/`)
           console.log(response.data)
         })
         .catch(error => {
