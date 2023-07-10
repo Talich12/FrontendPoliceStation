@@ -32,7 +32,8 @@
         return {
           armory: {
             policeman: {
-                inicials: ""
+                inicials: "",
+                id: 0
             }
           },
           policemans: []
