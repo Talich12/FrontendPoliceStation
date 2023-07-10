@@ -11,7 +11,7 @@
         <el-input v-model="trainee.sername" />
       </el-form-item>
       <el-form-item label="Сотрудник">
-        <el-select v-model="trainee.curator.id" class="m-2" placeholder="Select" size="large">
+        <el-select v-model="trainee.curator_id" class="m-2" placeholder="Select" size="large">
           <el-option
             v-for="item in policemans"
             :key="item.id"
@@ -40,11 +40,7 @@
       name: 'Trainee',
       data() {
           return {
-            trainee: {
-              curator: {
-                id: ""
-              }
-            },
+            trainee: {},
             policemans: []
           };
       },
@@ -80,7 +76,7 @@
             name: this.trainee.name,
             sername: this.trainee.sername,
             lastname: this.trainee.lastname,
-            curator_id: this.trainee.curator.id,
+            curator_id: this.trainee.curator_id,
             birthday: dayjs(this.trainee.birthday).format('YYYY-MM-DD')
           })
           .then(response => {

@@ -11,7 +11,7 @@
         <el-input v-model="armory.full_name" />
       </el-form-item>
       <el-form-item class="add" label="Сотрудник">
-        <el-select v-model="armory.policeman.id" class="m-2" placeholder="Select" size="large">
+        <el-select v-model="armory.policeman_id" class="m-2" placeholder="Select" size="large">
           <el-option
             v-for="item in policemans"
             :key="item.id"
@@ -31,10 +31,7 @@
     data() {
         return {
           armory: {
-            policeman: {
-                inicials: "",
-                id: 0
-            }
+            policeman_id: null
           },
           policemans: []
         };
@@ -54,12 +51,11 @@
         })
       },
       Confirm(){
-        console.log(this.armory.policeman.id)
         axios.post("http://localhost:3000/armory", {
             weapon_type: this.armory.weapon_type,
             code: this.armory.code,
             full_name: this.armory.full_name,
-            policeman_id: this.armory.policeman.id
+            policeman_id: this.armory.policeman_id
         })
         .then(response => {
           this.$router.push(`/`)

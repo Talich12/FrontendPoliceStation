@@ -7,7 +7,9 @@
     <el-tab-pane label="Стажеры" name="fourth">Стажеры</el-tab-pane>
     <el-tab-pane label="Задержания" name="five">Задержания</el-tab-pane>
     <el-tab-pane label="Преступники" name="six">Преступники</el-tab-pane>
-    <el-tab-pane label="Отчеты" name="seven">Отчеты</el-tab-pane>
+    <el-tab-pane label="Должности" name="seven">Должности</el-tab-pane>
+    <el-tab-pane label="Статусы" name="eight">Статусы</el-tab-pane>
+    <el-tab-pane label="Отчеты" name="nine">Отчеты</el-tab-pane>
   </el-tabs>
 
   <div v-if="activeName == 'first'">
@@ -123,7 +125,7 @@
       <el-table-column prop="name" label="Имя"/>
       <el-table-column prop="sername" label="Отчество" />
       <el-table-column prop="birthday" label="Дата рождения" />
-      <el-table-column prop="status" label="Статус" />
+      <el-table-column prop="status.status" label="Статус" />
       <el-table-column label="Действие">
         <template #default="{ row }">
           <el-button type="primary" @click="redirectToCriminal(row)">View</el-button>
@@ -137,8 +139,34 @@
     </el-table>
     <el-button @click="addCriminal()" class="add" size="large" type="primary">Добавить преступника</el-button>
   </div>
-
+  
   <div v-if="activeName == 'seven'">
+    <el-table :data="tableData" style="width: 100%">
+      <el-table-column prop="id" label="ID" width="180" />
+      <el-table-column prop="name" label="Название должности"/>
+      <el-table-column label="Удалить">
+        <template #default="{ row }">
+          <el-button type="danger" @click="deleteJob(row)">Удалить</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-button @click="addJob()" class="add" size="large" type="primary">Добавить Должность</el-button>
+  </div>
+
+  <div v-if="activeName == 'eight'">
+    <el-table :data="tableData" style="width: 100%">
+      <el-table-column prop="id" label="ID" width="180" />
+      <el-table-column prop="status" label="Статус"/>
+      <el-table-column label="Удалить">
+        <template #default="{ row }">
+          <el-button type="danger" @click="deleteStatus(row)">Удалить</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-button @click="addStatus()" class="add" size="large" type="primary">Добавить Должность</el-button>
+  </div>
+
+  <div v-if="activeName == 'nine'">
     <el-tabs v-model="activeReport" class="demo-tabs" @tab-click="handleClick">
       <el-tab-pane label="Сотрудники с оружием" name="one">Сотрудники с оружием</el-tab-pane>
       <el-tab-pane label="Сотрудники без оружия" name="two">Сотрудники без оружия</el-tab-pane>
@@ -179,6 +207,55 @@
           </template>
         </el-table-column>
       </el-table>
+    </div>
+
+    <div v-if="activeReport == 'three'">
+      <el-table :data="reportData" style="width: 100%">
+        <el-table-column prop="id" label="ID" width="180" />
+        <el-table-column prop="lastname" label="Фамилия"/>
+        <el-table-column prop="name" label="Имя"/>
+        <el-table-column prop="sername" label="Отчество" />
+        <el-table-column prop="job.name" label="Должность" />
+        <el-table-column prop="birthday" label="Дата рождения" />
+        <el-table-column prop="hire_date" label="Дата найма" />
+        <el-table-column label="Действие">
+          <template #default="{ row }">
+            <el-button type="primary" @click="redirectToPoliceman(row)">Открыть</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+
+    <div v-if="activeReport == 'forth'">
+      <el-table :data="reportData" style="width: 100%">
+      <el-table-column prop="id" label="ID" width="180" />
+      <el-table-column prop="lastname" label="Фамилия"/>
+      <el-table-column prop="name" label="Имя"/>
+      <el-table-column prop="sername" label="Отчество" />
+      <el-table-column prop="birthday" label="Дата рождения" />
+      <el-table-column prop="status.status" label="Статус" />
+      <el-table-column label="Действие">
+        <template #default="{ row }">
+          <el-button type="primary" @click="redirectToCriminal(row)">View</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    </div>
+
+    <div v-if="activeReport == 'five'">
+      <el-table :data="reportData" style="width: 100%">
+      <el-table-column prop="id" label="ID" width="180" />
+      <el-table-column prop="lastname" label="Фамилия"/>
+      <el-table-column prop="name" label="Имя"/>
+      <el-table-column prop="sername" label="Отчество" />
+      <el-table-column prop="birthday" label="Дата рождения" />
+      <el-table-column prop="status.status" label="Статус" />
+      <el-table-column label="Действие">
+        <template #default="{ row }">
+          <el-button type="primary" @click="redirectToCriminal(row)">View</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
     </div>
   </div>
 </template>
@@ -354,6 +431,16 @@ export default {
         console.log(error)
       })
     },
+    GetTraineePoliceman(){
+      axios.get("http://localhost:3000/policeman/trainee")
+      .then(response => {
+        this.reportData = response.data
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
     GetDetention(){
       axios.get("http://localhost:3000/detention")
       .then(response => {
@@ -368,6 +455,72 @@ export default {
       axios.get("http://localhost:3000/criminal")
       .then(response => {
         this.tableData = response.data
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+    GetFreeCriminal(){
+      axios.get("http://localhost:3000/criminal/free")
+      .then(response => {
+        this.reportData = response.data
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+    GetNotFreeCriminal(){
+      axios.get("http://localhost:3000/criminal/free/not")
+      .then(response => {
+        this.reportData = response.data
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+    GetJob(){
+      axios.get("http://localhost:3000/job")
+      .then(response => {
+        this.tableData = response.data
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+    addJob(){
+      this.$router.push(`/add-job`)
+    },
+    deleteJob(row){
+      axios.delete("http://localhost:3000/job/" + row.id)
+      .then(response => {
+        this.GetJob()
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+    GetStatus(){
+      axios.get("http://localhost:3000/status")
+      .then(response => {
+        this.tableData = response.data
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+    addStatus(){
+      this.$router.push(`/add-status`)
+    },
+    deleteStatus(row){
+      axios.delete("http://localhost:3000/status/" + row.id)
+      .then(response => {
+        this.GetStatus()
         console.log(response.data)
       })
       .catch(error => {
@@ -399,6 +552,12 @@ export default {
       else if(this.activeName == "six"){
         this.GetCriminal()
       }
+      else if(this.activeName == "seven"){
+        this.GetJob()
+      }
+      else if(this.activeName == "eight"){
+        this.GetStatus()
+      }
     },
     activeReport: function(){
       if (this.activeReport == "one"){
@@ -406,6 +565,15 @@ export default {
       }
       else if (this.activeReport == "two"){
         this.GetArmoryReportNot()
+      }
+      else if (this.activeReport == "three"){
+        this.GetTraineePoliceman()
+      }
+      else if (this.activeReport == "forth"){
+        this.GetFreeCriminal()
+      }
+      else if (this.activeReport == "five"){
+        this.GetNotFreeCriminal()
       }
     }
   }

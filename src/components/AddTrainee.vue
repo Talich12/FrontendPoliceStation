@@ -42,7 +42,7 @@
           return {
             trainee: {
               curator: {
-                id: ""
+                id: null
               }
             },
             policemans: []

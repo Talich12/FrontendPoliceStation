@@ -1,5 +1,5 @@
 <template>
-    <h1>Сотрудник</h1>
+    <h1>Преступник</h1>
     <el-form :inline="true" size="large" :model="criminal" label-width="120px" class="demo-form-inline">
       <el-form-item label="Фамилия">
         <el-input v-model="criminal.lastname" />
@@ -11,7 +11,14 @@
         <el-input v-model="criminal.sername" />
       </el-form-item>
       <el-form-item label="Статус">
-        <el-input v-model="criminal.status" />
+        <el-select v-model="criminal.status_id" class="m-2" placeholder="Select" size="large">
+          <el-option
+            v-for="item in status"
+            :key="item.id"
+            :label="item.status"
+            :value="item.id"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="День рождения">
         <el-date-picker
@@ -33,16 +40,29 @@
       name: 'Criminal',
       data() {
           return {
-            criminal: {},
+            criminal: {
+              status_id: null
+            },
+            status: []
           };
       },
       methods:{
+        GetStatus(){
+          axios.get("http://localhost:3000/status")
+          .then(response => {
+            this.status = response.data
+            console.log(response.data)
+          })
+          .catch(error => {
+            console.log(error)
+          })
+        },
         Confirm(){
           axios.post("http://localhost:3000/criminal", {
             name: this.criminal.name,
             sername: this.criminal.sername,
             lastname: this.criminal.lastname,
-            status: this.criminal.status,
+            status_id: this.criminal.status_id,
             birthday: dayjs(this.criminal.birthday).format('YYYY-MM-DD')
           })
           .then(response => {
@@ -55,6 +75,7 @@
         }
       },
       created() {
+        this.GetStatus()
       },
     }
     </script>

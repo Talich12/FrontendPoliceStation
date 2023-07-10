@@ -12,6 +12,8 @@ import Detention from "../components/Detention.vue"
 import AddDetention from "../components/AddDetention.vue";
 import Criminal from "../components/Criminal.vue"
 import AddCriminal from "../components/AddCriminal.vue"
+import AddJob from "../components/AddJob.vue"
+import AddStatus from "../components/AddStatus.vue"
 
 const routes = [
     {
@@ -78,6 +80,16 @@ const routes = [
         path: "/add-criminal",
         name: "AddCriminal",
         component: AddCriminal
+    },
+    {
+        path: "/add-job",
+        name: "AddJob",
+        component: AddJob
+    },
+    {
+        path: "/add-status",
+        name: "AddStatus",
+        component: AddStatus
     },
 ];
 
