@@ -10,6 +10,7 @@
     <el-tab-pane label="Должности" name="seven">Должности</el-tab-pane>
     <el-tab-pane label="Статусы" name="eight">Статусы</el-tab-pane>
     <el-tab-pane label="Отчеты" name="nine">Отчеты</el-tab-pane>
+    <el-tab-pane label="Жалобы" name="ten">Жалобы</el-tab-pane>
   </el-tabs>
 
   <div v-if="activeName == 'first'">
@@ -60,7 +61,7 @@
       <el-table-column prop="weapon_type" label="Тип" />
       <el-table-column prop="code" label="Код" />
       <el-table-column prop="full_name" label="Полное название" />
-      <el-table-column prop="policeman_fullname" label="Cотрудник" />
+      <el-table-column prop="status" label="Статус" />
       <el-table-column label="Действие">
         <template #default="{ row }">
           <el-button type="primary" @click="redirectToGun(row)">View</el-button>
@@ -103,6 +104,7 @@
       <el-table-column prop="policeman_fullname" label="Сотрудник"/>
       <el-table-column prop="criminal_fullname" label="Задержанный"/>
       <el-table-column prop="article" label="Статья" />
+      <el-table-column prop="report" label="Отчет" />
       <el-table-column prop="date" label="Дата задержания" />
       <el-table-column label="Действие">
         <template #default="{ row }">
@@ -173,6 +175,7 @@
       <el-tab-pane label="Сотрудники - Кураторы" name="three">Сотрудники - Кураторы</el-tab-pane>
       <el-tab-pane label="Свободные преступники" name="forth">Свободные преступники</el-tab-pane>
       <el-tab-pane label="Задержанные преступники" name="five">Задержанные преступники</el-tab-pane>
+      <el-tab-pane label="Оружие на складе" name="six">Оружие на складе</el-tab-pane>
     </el-tabs>
 
     <div v-if="activeReport == 'one'">
@@ -257,6 +260,45 @@
       </el-table-column>
     </el-table>
     </div>
+
+    <div v-if="activeReport == 'six'">
+      <el-table :data="reportData" style="width: 100%">
+      <el-table-column prop="id" label="ID" width="180" />
+      <el-table-column prop="weapon_type" label="Тип" />
+      <el-table-column prop="code" label="Код" />
+      <el-table-column prop="full_name" label="Полное название" />
+      <el-table-column prop="status" label="Статус" />
+      <el-table-column label="Действие">
+        <template #default="{ row }">
+          <el-button type="primary" @click="redirectToGun(row)">View</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    </div>
+  </div>
+
+  <div v-if="activeName == 'ten'">
+    <el-table :data="tableData" style="width: 100%">
+      <el-table-column prop="id" label="ID" width="180" />
+      <el-table-column prop="lastname" label="Фамилия"/>
+      <el-table-column prop="name" label="Имя"/>
+      <el-table-column prop="sername" label="Отчество" />
+      <el-table-column prop="adress" label="Адресс" />
+      <el-table-column prop="birthday" label="Дата рождения" />
+      <el-table-column prop="date" label="Дата" />
+      <el-table-column prop="report" label="Жалоба" />
+      <el-table-column label="Действие">
+        <template #default="{ row }">
+          <el-button type="primary" @click="redirectToAppeal(row)">Открыть</el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label="Удалить">
+        <template #default="{ row }">
+          <el-button type="danger" @click="deleteAppeal(row)">Удалить</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-button @click="addAppeal()" class="add" size="large" type="primary">Добавить сотрудника</el-button>
   </div>
 </template>
 
@@ -526,7 +568,44 @@ export default {
       .catch(error => {
         console.log(error)
       })
+    },
+    GetAppeal(){
+      axios.get("http://localhost:3000/appeal")
+      .then(response => {
+        this.tableData = response.data
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+    redirectToAppeal(row){
+      this.$router.push(`/appeal/${row.id}`);
+    },
+    addAppeal(){
+      this.$router.push(`/add-appeal`)
+    },
+    deleteAppeal(row){
+      axios.delete("http://localhost:3000/appeal/" + row.id)
+      .then(response => {
+        this.GetAppeal()
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+    GetFreeArmory(){
+      axios.get("http://localhost:3000/armory/not")
+      .then(response => {
+        this.reportData = response.data
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
     }
+
   },
   created() {
     this.GetPoliceman()
@@ -558,6 +637,9 @@ export default {
       else if(this.activeName == "eight"){
         this.GetStatus()
       }
+      else if(this.activeName == "ten"){
+        this.GetAppeal()
+      }
     },
     activeReport: function(){
       if (this.activeReport == "one"){
@@ -574,6 +656,9 @@ export default {
       }
       else if (this.activeReport == "five"){
         this.GetNotFreeCriminal()
+      }
+      else if (this.activeReport == "six"){
+        this.GetFreeArmory()
       }
     }
   }

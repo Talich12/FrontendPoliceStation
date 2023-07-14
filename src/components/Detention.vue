@@ -1,10 +1,14 @@
 <template>
-    <h1>Сотрудник</h1>
+    <h1>Задержание</h1>
     <el-form :inline="true" size="large" :model="detention" label-width="120px" class="demo-form-inline">
       <el-form-item label="Статья">
         <el-input v-model="detention.article" />
       </el-form-item>
       
+      <el-form-item label="Отчет">
+        <el-input v-model="detention.report" />
+      </el-form-item>
+
       <el-form-item label="Сотрудник">
         <el-select v-model="detention.policeman.id" class="m-2" placeholder="Select" size="large">
           <el-option
@@ -95,6 +99,7 @@
             policeman_id: this.detention.policeman.id,
             criminal_id: this.detention.criminal.id,
             article: this.detention.article,
+            report: this.detention.report,
             date: dayjs(this.detention.date).format('YYYY-MM-DD')
           })
           .then(response => {

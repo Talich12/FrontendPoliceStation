@@ -14,6 +14,8 @@ import Criminal from "../components/Criminal.vue"
 import AddCriminal from "../components/AddCriminal.vue"
 import AddJob from "../components/AddJob.vue"
 import AddStatus from "../components/AddStatus.vue"
+import Appeal from "../components/Appeal.vue"
+import AddAppeal from "../components/AddAppeal.vue"
 
 const routes = [
     {
@@ -90,6 +92,16 @@ const routes = [
         path: "/add-status",
         name: "AddStatus",
         component: AddStatus
+    },
+    {
+        path: "/appeal/:id",
+        name: "Appral",
+        component: Appeal
+    },
+    {
+        path: "/add-appeal",
+        name: "AddAppeal",
+        component: AddAppeal
     },
 ];
 
